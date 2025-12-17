@@ -180,6 +180,7 @@ namespace WebShopApp.Areas.Identity.Pages.Account
                     //    await _signInManager.SignInAsync(user, isPersistent: false);
                     //    return LocalRedirect(returnUrl);
                     //}
+                    _userManager.AddToRoleAsync(user, "Client").Wait();
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
