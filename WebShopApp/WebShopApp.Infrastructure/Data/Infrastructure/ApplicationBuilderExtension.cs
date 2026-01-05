@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using WebShopApp.Infrastructure.Data;
 using WebShopApp.Infrastructure.Data.Domain;
 
 namespace WebShopApp.Infrastructure.Data.Infrastructure
