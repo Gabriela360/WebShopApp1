@@ -1,18 +1,26 @@
 ﻿@model IEnumerable<WebShopApp.Models.Product.ProductIndexVM>
+
 @{
     ViewData["Title"] = "Index";
 }
-<h1>Index</h1>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Products</h1>
+
+@if ((this.User.Identity.IsAuthenticated) && (this.User.IsInRole("Administrator")))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-warning">Create New</a>
+    </p>
+}
+
 <form asp-controller="Product" asp-action="Index" method="get">
     <p>
         Brand: <input type="text" name="SearchStringBrandName" />
         Category: <input type="text" name="SearchStringCategoryName" />
+
         <input type="submit" value="Filter" />
     </p>
 </form>
+
 <table class="table">
     <thead>
         <tr>
@@ -20,17 +28,14 @@
                 @Html.DisplayNameFor(model => model.ProductName)
             </th>
             @*<th>
-@Html.DisplayNameFor(model => model.BrandId)
-
-14
-
-</th>*@
+            @Html.DisplayNameFor(model => model.BrandId)
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.BrandName)
             </th>
             @*<th>
-@Html.DisplayNameFor(model => model.CategoryId)
-</th>*@
+            @Html.DisplayNameFor(model => model.CategoryId)
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.CategoryName)
             </th>
@@ -46,6 +51,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Discount)
             </th>
+
         </tr>
     </thead>
     <tbody>
@@ -56,20 +62,19 @@
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
                 @*<td>
-@Html.DisplayFor(modelItem => item.BrandId)
-</td>*@
+            @Html.DisplayFor(modelItem => item.BrandId)
+            </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.BrandName)
                 </td>
                 @*<td>
-@Html.DisplayFor(modelItem => item.CategoryId)
-</td>*@
+            @Html.DisplayFor(modelItem => item.CategoryId)
+            </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.CategoryName)
                 </td>
                 <td>
-                    <img src="@Html.DisplayFor(modelItem => item.Picture)" alt="Image"
-                         width="100" />
+                    <img src="@Html.DisplayFor(modelItem => item.Picture)" alt="Image" width="100" />
                     @*@Html.DisplayFor(modelItem => item.Pictute)*@
                 </td>
                 <td>
@@ -81,19 +86,19 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Discount) %
                 </td>
+
                 <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
 
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-
-    warning">Edit</a>
-
-                    15
-
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-
-    success">Details</a>
-
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-
-    danger">Delete</a>
-
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <a asp-action="Create" asp-controller="Order" asp-route-id="@item.Id" class="btn btn-warning">Order</a>
+                    }
+                    @if ((this.User.Identity.IsAuthenticated) && (this.User.IsInRole("Administrator")))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    }
                 </td>
             </tr>
         }
@@ -104,3 +109,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
