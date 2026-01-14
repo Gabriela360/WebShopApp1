@@ -10,7 +10,7 @@ using WebShopApp.Models.Product;
 
 namespace WebShopApp.Controllers
 {
-
+    [Authorize(Roles = "Administrator")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
@@ -25,7 +25,7 @@ namespace WebShopApp.Controllers
         }
 
 
-
+        [AllowAnonymous]
         // GET: ProductController
         public ActionResult Index(string searchStringCategoryName, string searchStringBrandName)
         {
@@ -47,6 +47,7 @@ namespace WebShopApp.Controllers
             return this.View(products);
         }
 
+        [AllowAnonymous]
         // GET: ProductController/Details/5
         public ActionResult Details(int id)
         {
