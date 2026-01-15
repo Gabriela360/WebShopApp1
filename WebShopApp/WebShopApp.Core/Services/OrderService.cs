@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using WebShopApp.Core.Contacts;
+using WebShopApp.Infrastructure.Data;
+using WebShopApp.Infrastructure.Data.Domain;
+
+namespace WebShopApp.Core.Services
+{
+    public class OrderService : IOrderService
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IProductService _productService;
+
+        public OrderService(ApplicationDbContext context, IProductService productService)
+        {
+            _context = context;
+            _productService = productService;
+        }
+
+        public bool Create(int productId, string userId, int quantity)
+        {
+            //намиране продукта по неговото id
+            var product = this._context.Products.SingleOrDefault(x => x.Id == productId);
+
+            //проверяваме дали има такъв продукт
+            if (product == null)
+            {
+                return false;
+            }
+
+            //създаване на поръчка
+            Order item = new Order
+            {
+                OrderDate = DateTime.Now,
+                ProductId = productId,
+                UserId = userId,
+                Quantity = quantity,
+                Price = product.Price,
+                Discount = product.Discount
+            };
+
+            //намаляване на количеството на продукта
+            product.Quantity -= quantity;
+
+            //отразяване на промените в колекциите
+            this._context.Products.Update(product);
+            this._context.Orders.Add(item);
+
+            //запис на промените в БД
+            return _context.SaveChanges() != 0;
+        }
+
+        public List<Order> GetOrders()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
