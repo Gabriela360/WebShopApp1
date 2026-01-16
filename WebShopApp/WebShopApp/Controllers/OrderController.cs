@@ -62,6 +62,7 @@ namespace WebShopApp.Controllers
             return this.RedirectToAction("Index", "Product");
         }
 
+
         public ActionResult Denied()
         {
             return View();
