@@ -62,7 +62,10 @@ namespace WebShopApp.Core.Services
 
         public List<Order> GetOrdersByUser(string userId)
         {
-            throw new NotImplementedException();
+            return _context.Orders
+                .Where(o => o.UserId == userId)
+                .OrderByDescending(o => o.OrderDate)
+                .ToList();
         }
 
         public bool RemoveById(int orderId)
@@ -74,5 +77,12 @@ namespace WebShopApp.Core.Services
         {
             return _context.Orders.OrderByDescending(x => x.OrderDate).ToList();
         }
+
+        public bool Update(int orderId, int productId, string userId, int quantity)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

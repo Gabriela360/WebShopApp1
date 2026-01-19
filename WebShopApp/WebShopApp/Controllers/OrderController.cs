@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using System.Globalization;
 using System.Security.Claims;
 
 using WebShopApp.Core.Contacts;
@@ -71,6 +72,30 @@ namespace WebShopApp.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult MyOrders()
+        {
+            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // var user = _context.Users.SingleOrDefault(u => u.Id == userId);
+
+            List<OrderIndexVM> orders = _orderService.GetOrdersByUser(currentUserId)
+                .Select(x => new OrderIndexVM
+                {
+                    Id = x.Id,
+                    OrderDate = x.OrderDate.ToString("dd-MMM-yyyy hh:mm", CultureInfo.InvariantCulture),
+                    UserId = x.UserId,
+                    User = x.User.UserName,
+                    ProductId = x.ProductId,
+                    Product = x.Product.ProductName,
+                    Picture = x.Product.Picture,
+                    Quantity = x.Quantity,
+                    Price = x.Price,
+                    Discount = x.Discount,
+                    TotalPrice = x.TotalPrice
+                }).ToList();
+
+            return View(orders);
         }
     }
 }
